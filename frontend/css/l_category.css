@@ -1,0 +1,160 @@
+.hero {
+    width: 100%;
+    height: 50vh; 
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed; 
+    position: relative;
+    color: #fff; /* Warna putih agar lebih kontras */
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.hero h1 {
+    font-size: 3rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+.subtext {
+    font-size: 1.2rem;
+    font-weight: 300;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.judul p{
+    text-align: justify;
+}
+
+/* Start Trend */
+.section-subtitle {
+    color: #B76E79;
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.section-title {
+    font-size: 40px;
+    font-weight: 550;
+    color: #333;
+}
+
+.button-trend {
+    display: inline-block;
+    text-decoration: none;
+    background-color: white;
+    color: black;
+    border: 1px solid #333333;
+    padding: 8px 16px;
+    border-radius: 5px;
+    font-size: 16px;
+    margin-top: 65px;
+    transition: all 0.3s ease-in-out;
+}
+
+.button-trend:hover {
+    background-color: #B76E79;
+    color: white;
+    border-color: #B76E79;
+}
+
+.trending{
+    text-decoration: none;
+    color: #333;
+}
+
+.card-trend {
+    background-color: white;
+    border: 2px solid #ddd; 
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+    flex-direction: column; 
+    height: 100%;
+}
+
+.card-trend:hover {
+    transform: translateY(-5px);
+}
+
+.card-trend:hover .trend-image img{
+    filter: brightness(70%);
+}
+
+.trend-image {
+    padding: 8px;
+}
+
+.trend-image img {
+    width: 100%;
+    height: 200px; 
+    object-fit: cover;
+    transition: 0.4s;
+}
+
+.card-trend-content {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.card-trend-title {
+    font-size: 24px;
+    margin-bottom: 8px;
+    min-height: 50px; 
+    display: flex;
+    align-items: center;
+}
+
+.card-trend-content p {
+    font-size: 16px;
+    color: #666;
+    flex-grow: 1;
+}
+
+.card-trend-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 2px solid #ddd;
+    padding: 10px 16px;
+    font-size: 1.2rem;
+    align-self: flex-end; 
+    width: 100%;
+}
+
+.card-trend-footer p {
+    align-items: center;
+    width: 100%;
+    margin: 0;
+}
+
+.card-trend-footer p span {
+    margin-left: 15px;
+}
+
+.arrow-trend {
+    cursor: pointer;
+    text-decoration: none;
+    color: #333;
+    transition: 0.4s;
+}
+
+.arrow-trend:hover {
+    color: #B76E79;
+    transform: translateX(5px);
+}
+/* End Trend */
