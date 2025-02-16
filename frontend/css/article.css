@@ -1,0 +1,492 @@
+body {
+    background-color: #f8f9fa;
+    font-family: 'Arial', sans-serif;
+}
+
+.container {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+}
+
+.tema{
+    font-size: 14px;
+    text-transform: uppercase;
+    color: #B76E79;
+}
+
+.title{
+    font-size: 64px;
+}
+
+.paragraph{
+    font-size: 21px;
+    color: #333333;
+}
+
+.content-title .section-title{
+    font-size: 21px;
+    text-align: justify;
+}
+
+.content-title h2{
+    font-size: 24px;
+    font-weight: 550;
+}
+
+.content-title .title-p{
+    font-size: 16px;
+    color: #333333;
+    text-align: justify;
+}
+
+.hero .title-m{
+    font-size: 16px;
+    color: #333333;
+    text-align: justify;
+}
+
+/* Start Trend */
+.section-subtitle {
+    color: #B76E79;
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.section-title {
+    font-size: 48px;
+    color: #333;
+}
+
+.button-trend {
+    display: inline-block;
+    text-decoration: none;
+    background-color: white;
+    color: black;
+    border: 1px solid #333333;
+    padding: 8px 16px;
+    border-radius: 5px;
+    font-size: 16px;
+    margin-top: 65px;
+    transition: all 0.3s ease-in-out;
+}
+
+.button-trend:hover {
+    background-color: #B76E79;
+    color: white;
+    border-color: #B76E79;
+}
+
+.trending{
+    text-decoration: none;
+    color: #333;
+}
+
+.card-trend {
+    background-color: white;
+    border: 2px solid #ddd; 
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+    flex-direction: column; 
+    height: 100%;
+}
+
+.card-trend:hover {
+    transform: translateY(-5px);
+}
+
+.card-trend:hover .trend-image img{
+    filter: brightness(70%);
+}
+
+.trend-image {
+    padding: 8px;
+}
+
+.trend-image img {
+    width: 100%;
+    height: 200px; 
+    object-fit: cover;
+    transition: 0.4s;
+}
+
+.card-trend-content {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.card-trend-title {
+    font-size: 24px;
+    margin-bottom: 8px;
+    min-height: 50px; 
+    display: flex;
+    align-items: center;
+}
+
+.card-trend-content p {
+    font-size: 16px;
+    color: #666;
+    flex-grow: 1;
+}
+
+.card-trend-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 2px solid #ddd;
+    padding: 10px 16px;
+    font-size: 1.2rem;
+    align-self: flex-end; 
+    width: 100%;
+}
+
+.card-trend-footer p {
+    align-items: center;
+    width: 100%;
+    margin: 0;
+}
+
+.card-trend-footer p span {
+    margin-left: 15px;
+}
+
+.arrow-trend {
+    cursor: pointer;
+    text-decoration: none;
+    color: #333;
+    transition: 0.4s;
+}
+
+.arrow-trend:hover {
+    color: #B76E79;
+    transform: translateX(5px);
+}
+/* End Trend */
+
+/* starts subscription */
+.subscription-container {
+    width: 100%;
+    margin: 50px auto;
+    background: white;
+    border: 2px solid #ddd; 
+}
+.subscription-text{
+    padding: 50px;
+}
+.subscription-title{
+    color: #B76E79;
+    text-transform: uppercase;
+}
+.subscription-text h2 {
+    font-weight: 500;
+    font-size: 48px;
+}
+.subscription-text p {
+    color: #6c757d;
+    padding-right: 16px;
+    font-size: 16px;
+}
+
+.input-group{
+    width: 90%;
+    margin-top: 50px;
+    height: 50px;
+    border: 3px solid #ccc;
+}
+.input-group input{
+    font-size: 14px;
+}
+.subscribe-btn {
+    background-color: #FFB6C1;
+    color: #333;
+    border: none;
+    font-size: 14px;
+}
+.subscribe-btn:hover {
+    background-color: #eca2ad;
+}
+.image-container img {
+    width: 100%;
+    padding-top: 14px;
+    padding-bottom: 14px;
+}
+
+/* end subscription */
+
+
+/* start question */
+.question-text h6{
+    color: #B76E79;
+    text-transform: uppercase;
+}
+.question-text h2{
+    font-size: 48px;
+}
+.question-massage{
+    border-radius: 5px;
+    border: 1px solid #333;
+    padding: 20px 20px 0 20px;
+    margin-bottom: 25px;
+}
+.question-massage h3{
+    font-size: 24px;
+    color: #333;
+}
+.question-massage p{
+    font-size: 16px; 
+    font-weight: normal;   
+    color: #6f6f6f;
+    text-align: justify;
+}
+/* end question */
+
+
+/* start testimoni */
+.testimoni-massage {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; 
+    height: 100%; 
+    padding: 20px;
+    border: 1px solid #333;
+    border-radius: 5px;
+    background-color: #fff;
+}
+.row {
+    display: flex;
+    flex-wrap: wrap;
+}
+.testimoni-massage .icon{
+    font-size: 35px;
+    margin-bottom: 15px;
+}
+.testimoni-massage .icon i{
+    background: linear-gradient(to top, #f8b400, #fffac0); 
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    /* text-shadow: 0 0 10px rgba(255, 215, 0, 0.8); */
+}
+.testimoni-text h2{
+    font-size: 48px;
+}
+/* end testimoni */
+
+/* start share */
+.custom-list {
+    list-style: none; 
+    padding: 0;
+}
+
+.custom-list li {
+    margin-bottom: 10px; 
+    display: flex;
+    align-items: center;
+}
+
+.custom-list i {
+    margin-right: 8px; 
+}
+.custom-list .volume{
+    font-size: 23px;
+    background: linear-gradient(to top, #4f4f4f, #aaaaaa); 
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.custom-list .chat{
+    font-size: 18px;
+    background: linear-gradient(to top, #6c6c6c, #ffffff); 
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.custom-list .star{
+    font-size: 21px;
+    background: linear-gradient(to top, #f8b400, #fffac0); 
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.share-group {
+    display: flex;
+    align-items: center;
+    position: relative;
+    width: 100%;
+    max-width: 500px; 
+    margin-top: 20px;
+}
+
+.share-group input {
+    flex: 1;
+    padding: 15px 100px 15px 15px; 
+    border: 2px solid #ddd;
+    font-size: 16px;
+}
+
+.share-group .share-btn {
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    background-color: #FFB6C1;
+    color: #333;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.share-group .share-btn:hover {
+    background-color: #eca2ad;
+}
+/* end share */
+
+
+/* start footer */
+.footer {
+    padding: 10px 0;
+}
+
+.social-icons a {
+    color: #333; 
+    font-size: 24px;
+    margin-right: 10px;
+    text-decoration: none;
+}
+
+.footer-links a {
+    color: #333;
+    margin: 0 10px;
+    text-decoration: none;
+}
+
+.footer-links a:hover,
+.social-icons a:hover {
+    color: black;
+}
+/* end footer */
+
+@media screen and (max-width: 1204px){
+    .title{
+        font-size: 45px;
+    }
+    .section-title{
+        font-size: 35px;
+    }
+    .subscription-text h2{
+        font-size: 35px;
+    }
+    .question-text h2{
+        font-size: 35px;
+    }
+    .testimoni-text h2{
+        font-size: 35px;
+    }
+    .share-text h2{
+        font-size: 35px;
+    }
+    .input-group{
+        margin-top: 30px;
+    }
+}
+@media screen and (max-width: 1024px){
+    .title{
+        font-size: 35px;
+    }
+    .paragraph{
+        font-size: 18px;
+    }
+    .content-title .section-title{
+        font-size: 18px;
+    }
+    .card-trend-title {
+        font-size: 20px;
+    }
+    .card-trend-content p{
+        font-size: 14px;
+    }
+    .subscription-text p{
+        font-size: 14px;
+    }
+    .input-group input{
+        font-size: 14px;
+    }
+    .question-massage h3{
+        font-size: 20px;
+    }
+    .question-massage p{
+        font-size: 14px;
+    }
+    .testi{
+        margin-bottom: 26px;
+    }
+    .icon i{
+        font-size: 20px;
+    }
+    .testimoni-text p{
+        font-size: 14px;
+    }
+    .testimoni-text sppan{
+        font-size: 14px;
+    }
+}
+
+@media screen and (max-width: 987px){
+    .section-title{
+        font-size: 30px;
+    }
+    .card-trend-title {
+        font-size: 18px;
+    }
+    .card-trend-content p{
+        font-size: 12px;
+    }
+    .subscription-text{
+        padding: 30px;
+    }
+    .subscription-text h2{
+        font-size: 20px;
+    }
+    .subscription-text p{
+        padding: 0;
+        font-size: 12px;
+        text-align: justify;
+    }
+    .input-group{
+        margin-top: 10px;
+        height: 39px;
+    }
+    .input-group input{
+        font-size: 12px;
+    }
+    .question-text h2{
+        font-size: 30px;
+    }
+    .question-massage h3{
+        font-size: 18px;
+    }
+    .question-massage p{
+        font-size: 12px;
+    }
+    .testimoni-text h2{
+        font-size: 30px;
+    }
+    .icon i{
+        font-size: 18px;
+    }
+    .testimoni-text p{
+        font-size: 12px;
+    }
+    .testimoni-text sppan{
+        font-size: 12px;
+    }
+    .share-text h2{
+        font-size: 30px;
+    }
+    .footer-links a{
+        font-size: 12px;
+    }
+}
