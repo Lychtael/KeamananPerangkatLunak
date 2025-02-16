@@ -8,11 +8,18 @@ class User {
         $this->pdo = $pdo;
     }
 
+    public function checkEmailExists($email) {
+        $stmt = $this->pdo->prepare("SELECT id FROM users WHERE email = ?");
+        $stmt->execute([$email]);
+        return $stmt->fetch() ? true : false;
+    }
+    
     public function register($name, $email, $password) {
         $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
         $stmt = $this->pdo->prepare("INSERT INTO users (name, email, password) VALUES (?, ?, ?)");
         return $stmt->execute([$name, $email, $hashedPassword]);
     }
+    
 
     public function login($email, $password) {
         $stmt = $this->pdo->prepare("SELECT * FROM users WHERE email = ?");

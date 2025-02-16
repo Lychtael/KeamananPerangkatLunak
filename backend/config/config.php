@@ -1,10 +1,7 @@
 <?php
-// Pengaturan umum situs
-define("SITE_NAME", "Beauty Whimsy");
-define("BASE_URL", "http://localhost/beauty-whimsy");
-
-// Pengaturan timezone
-date_default_timezone_set("Asia/Jakarta");
+// Konfigurasi umum aplikasi
+define('APP_NAME', 'Beauty Whimsy');
+define('BASE_URL', 'http://localhost/BeautyWhimsy'); // Sesuaikan dengan URL proyek kamu
 
 // Pengaturan session
 session_start();
