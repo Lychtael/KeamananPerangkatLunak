@@ -30,7 +30,7 @@
 
       <div class="row mt-4">
         <div class="col-12 mx-auto">
-          <img src="img/trend1.png" width="100%" alt="" />
+          <img src="/frontend/assets/img/trend1.png" width="100%" alt="" />
         </div>
       </div>
 
