@@ -1,22 +1,30 @@
 <?php
 class Database
 {
-    private $host = "localhost";
-    private $db_name = "blog"; // Ganti dengan nama database Anda
-    private $username = "root"; // Ganti dengan username database Anda
-    private $password = ""; // Ganti dengan password database Anda
-    public $conn;
+    private static $host = "localhost";
+    private static $db_name = "blog"; // Ganti dengan nama database Anda
+    private static $username = "root"; // Ganti dengan username database Anda
+    private static $password = ""; // Ganti dengan password database Anda
+    private static $conn = null;
 
-    public function connect()
+    public static function connect()
     {
-        $this->conn = new mysqli($this->host, $this->username, $this->password, $this->db_name);
-        if ($this->conn->connect_error) {
-            die("Koneksi error: " . $this->conn->connect_error);
-            return false; // Penting untuk mengembalikan false jika koneksi gagal
+        if (self::$conn === null) {
+            self::$conn = new mysqli(self::$host, self::$username, self::$password, self::$db_name);
+
+            if (self::$conn->connect_error) {
+                die("Koneksi error: " . self::$conn->connect_error);
+            }
         }
-        return $this->conn;
+        return self::$conn;
+    }
+
+    public static function disconnect()
+    {
+        if (self::$conn !== null) {
+            self::$conn->close();
+            self::$conn = null;
+        }
     }
 }
-
-$database = new Database();
-$db = $database->connect();
+?>
