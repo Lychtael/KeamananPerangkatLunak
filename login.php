@@ -157,7 +157,7 @@
             </div>
             <div class="button-group">
               <button class="btn login" type="submit">LOGIN</button>
-              <a href="regist.html" class="btn sign-up">SIGN UP</a>
+              <a href="regist.php" class="btn sign-up">SIGN UP</a>
             </div>
           </form>
         </div>
@@ -174,21 +174,21 @@
     </div>
 
     <script>
-    document.getElementById("loginForm").addEventListener("submit", function (e) {
+    document.getElementById("loginForm").addEventListener("submit", function (e) { 
         e.preventDefault();
-
+        
         const formData = new FormData(this);
 
-        fetch("backend/login.php", { // Pastikan path ini sesuai dengan backend login
+        fetch("backend/controllers/AuthController.php?action=login", {
             method: "POST",
             body: formData
         })
-        .then(response => response.json()) // Pastikan response diproses sebagai JSON
+        .then(response => response.json()) // Process response as JSON
         .then(data => {
             if (data.status === "success") {
-                window.location.href = "frontend/views/index.php"; // Redirect jika login berhasil
+                window.location.href = "index.php"; // Redirect on success
             } else {
-                alert(data.message); // Tampilkan pesan error dari backend
+                alert(data.message); // Show error message from backend
             }
         })
         .catch(error => {

@@ -11,24 +11,24 @@ class User
 
     public function checkEmail($email)
     {
-        $sql = "SELECT id FROM users WHERE email = ? LIMIT 1"; // Ambil id saja (lebih efisien)
+        $sql = "SELECT id FROM users WHERE email = ? LIMIT 1"; 
         $stmt = $this->db->prepare($sql);
         $stmt->bind_param("s", $email);
         $stmt->execute();
-        $result = $stmt->get_result();
+        $stmt->store_result();
         
-        return $result->num_rows > 0; // Jika ada baris, berarti email sudah ada
+        return $stmt->num_rows > 0; // Jika ada baris, berarti email sudah digunakan
     }
-    
 
     public function register($username, $first_name, $last_name, $email, $password)
     {
-        $sql = "INSERT INTO users (username, first_name, last_name, email, password, created_at) VALUES (?, ?, ?, ?, ?, NOW())";
+        $sql = "INSERT INTO users (username, first_name, last_name, email, password, created_at) 
+                VALUES (?, ?, ?, ?, ?, NOW())";
         $stmt = $this->db->prepare($sql);
-        
+
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
         $stmt->bind_param("sssss", $username, $first_name, $last_name, $email, $hashedPassword);
-        
+
         return $stmt->execute();
     }
 

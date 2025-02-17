@@ -3,7 +3,7 @@ class Database {
     private static $host = "localhost";
     private static $db_name = "blog";
     private static $username = "root";
-    private static $password = "";
+    private static $password = "password";
     private static $conn;
 
     public static function connect() {

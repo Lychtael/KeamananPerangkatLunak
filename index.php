@@ -3,7 +3,7 @@ session_start();
 
 // Periksa apakah pengguna sudah login atau belum
 if (!isset($_SESSION['user_id'])) {
-    header("Location: frontend/views/login.php");
+    header("Location: login.php");
     exit();
 }
 ?>
@@ -684,8 +684,9 @@ if (!isset($_SESSION['user_id'])) {
               <a class="nav-link" href="#">Contact</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link btn btn-outline-secondary" href="#">Subscribe</a>
-            </li>
+  <a class="nav-link btn btn-outline-secondary" href="#" id="logoutBtn">Logout</a>
+</li>
+
           </ul>
         </div>
       </nav>
@@ -1068,6 +1069,16 @@ if (!isset($_SESSION['user_id'])) {
       }
 
     });
+
+    document.getElementById("logoutBtn").addEventListener("click", async function(e) {
+    e.preventDefault(); // Mencegah halaman untuk reload
+
+    // Hapus cookie atau sesi yang berkaitan dengan login (misalnya 'Bearer')
+    document.cookie = "Bearer=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"; // Hapus cookie 'Bearer'
+    
+    // Arahkan pengguna ke halaman logout atau login
+    window.location.href = "login.php"; // Ganti dengan URL yang sesuai dengan aplikasi Anda
+});
 
     document.getElementById('imageUpload').addEventListener('change', function(event) {
 

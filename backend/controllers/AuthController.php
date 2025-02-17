@@ -1,9 +1,7 @@
 <?php
 // AuthController.php
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+header("Content-Type: application/json");
 
 require_once '../config/database.php';
 require_once '../models/User.php';
@@ -12,9 +10,9 @@ class AuthController
 {
     private $userModel;
 
-    public function __construct()
+    public function __construct($db)
     {
-        $this->userModel = new User();
+        $this->userModel = new User($db);
     }
 
     public function register()
@@ -25,14 +23,13 @@ class AuthController
             return;
         }
 
-        $first_name = htmlspecialchars(trim($_POST['first_name']));
-        $last_name = htmlspecialchars(trim($_POST['last_name']));
-        $username = htmlspecialchars(trim($_POST['username']));
-        $email = htmlspecialchars(trim($_POST['email']));
-        $password = $_POST['password'];
+        $username = htmlspecialchars(trim($_POST['username'] ?? ''));
+        $first_name = htmlspecialchars(trim($_POST['first_name'] ?? ''));
+        $last_name = htmlspecialchars(trim($_POST['last_name'] ?? ''));
+        $email = htmlspecialchars(trim($_POST['email'] ?? ''));
+        $password = $_POST['password'] ?? '';
 
-        // Validasi input
-        if (empty($first_name) || empty($last_name) || empty($username) || empty($email) || empty($password)) {
+        if (empty($username) || empty($first_name) || empty($last_name) || empty($email) || empty($password)) {
             http_response_code(400);
             echo json_encode(['status' => 'error', 'message' => 'Semua field harus diisi']);
             return;
@@ -50,10 +47,7 @@ class AuthController
             return;
         }
 
-        // Hash password sebelum disimpan
-        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-
-        if ($this->userModel->register($username, $first_name, $last_name, $email, $hashedPassword)) {
+        if ($this->userModel->register($username, $first_name, $last_name, $email, $password)) {
             http_response_code(201);
             echo json_encode(['status' => 'success', 'message' => 'Registrasi berhasil']);
         } else {
@@ -64,16 +58,14 @@ class AuthController
 
     public function login()
     {
-        global $db;
-
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             http_response_code(405);
             echo json_encode(['status' => 'error', 'message' => 'Metode tidak diizinkan']);
             return;
         }
 
-        $email = htmlspecialchars(trim($_POST['email']));
-        $password = $_POST['password'];
+        $email = trim($_POST['email'] ?? '');
+        $password = $_POST['password'] ?? '';
 
         if (empty($email) || empty($password)) {
             http_response_code(400);
@@ -81,53 +73,41 @@ class AuthController
             return;
         }
 
-        error_log("Mencoba login dengan email: " . $email);
-
         $user = $this->userModel->getUserByEmail($email);
 
-        if (!$user) {
-            error_log("User tidak ditemukan dengan email: " . $email);
+        if (!$user || !password_verify($password, $user['password'])) {
             http_response_code(401);
             echo json_encode(['status' => 'error', 'message' => 'Email atau password salah']);
             return;
         }
 
-        error_log("Data User dari Database: " . print_r($user, true));
+        session_start();
+        $_SESSION['user_id'] = $user['id'];
+        $_SESSION['username'] = $user['username'];
 
-        if (password_verify($password, $user['password'])) {
-            session_start();
-            $_SESSION['user_id'] = $user['id'];
-            $_SESSION['username'] = $user['username'];
-
-            echo json_encode(['status' => 'success', 'message' => 'Login berhasil']);
-        } else {
-            error_log("Verifikasi password gagal untuk email: " . $email);
-            http_response_code(401);
-            echo json_encode(['status' => 'error', 'message' => 'Email atau password salah']);
-        }
+        echo json_encode(['status' => 'success', 'message' => 'Login berhasil']);
     }
 
     public function logout()
     {
         session_start();
+        session_unset();
         session_destroy();
-        header("Location: ../../login.html");
-        exit();
+
+        echo json_encode(['status' => 'success', 'message' => 'Logout berhasil']);
     }
 }
 
-// Routing sederhana berdasarkan parameter 'action'
-if (isset($_GET['action'])) {
-    $auth = new AuthController();
-    $action = $_GET['action'];
+// Routing berdasarkan parameter 'action'
+$database = new Database();
+$db = $database->connect();
+$auth = new AuthController($db);
 
-    if (method_exists($auth, $action)) {
-        $auth->$action();
-    } else {
-        http_response_code(400);
-        echo json_encode(['status' => 'error', 'message' => 'Action tidak valid']);
-    }
+$action = $_GET['action'] ?? '';
+
+if (method_exists($auth, $action)) {
+    $auth->$action();
 } else {
     http_response_code(400);
-    echo json_encode(['status' => 'error', 'message' => 'Action tidak didefinisikan']);
+    echo json_encode(['status' => 'error', 'message' => 'Action tidak valid']);
 }
