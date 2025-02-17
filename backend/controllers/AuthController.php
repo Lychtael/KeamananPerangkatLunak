@@ -1,10 +1,11 @@
 <?php
+// AuthController.php
 
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-require_once '../config/database.php'; // Pastikan ini didefinisikan sebelum digunakan
+require_once '../config/database.php';
 require_once '../models/User.php';
 
 class AuthController
@@ -61,61 +62,57 @@ class AuthController
         }
     }
 
-    // public function login()
-    // {
-    //     global $db; // Pastikan $db diakses secara global
+    public function login()
+    {
+        global $db;
 
-    //     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    //         http_response_code(405);
-    //         echo "Metode tidak diizinkan"; // PESAN ERROR TEXT BIASA
-    //         return;
-    //     }
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            http_response_code(405);
+            echo json_encode(['status' => 'error', 'message' => 'Metode tidak diizinkan']);
+            return;
+        }
 
-    //     $email = htmlspecialchars(trim($_POST['email'])); // Gunakan email untuk login
-    //     $password = $_POST['password'];
+        $email = htmlspecialchars(trim($_POST['email']));
+        $password = $_POST['password'];
 
-    //     if (empty($email) || empty($password)) {
-    //         http_response_code(400);
-    //         echo "Email dan password harus diisi"; // PESAN ERROR TEXT BIASA
-    //         return;
-    //     }
+        if (empty($email) || empty($password)) {
+            http_response_code(400);
+            echo json_encode(['status' => 'error', 'message' => 'Email dan password harus diisi']);
+            return;
+        }
 
-    //     // Tambahkan logging di sini!  Penting untuk debugging
-    //     error_log("Mencoba login dengan email: " . $email);
+        error_log("Mencoba login dengan email: " . $email);
 
-    //     $user = $this->userModel->getUserByEmail($email); // Dapatkan user berdasarkan email
+        $user = $this->userModel->getUserByEmail($email);
 
-    //     if (!$user) {
-    //         error_log("User tidak ditemukan dengan email: " . $email);
-    //         http_response_code(401);
-    //         echo "Email atau password salah"; // PESAN ERROR TEXT BIASA
-    //         return;
-    //     }
+        if (!$user) {
+            error_log("User tidak ditemukan dengan email: " . $email);
+            http_response_code(401);
+            echo json_encode(['status' => 'error', 'message' => 'Email atau password salah']);
+            return;
+        }
 
-    //     // Tambahkan logging di sini untuk memeriksa data user
-    //     error_log("Data User dari Database: " . print_r($user, true));
+        error_log("Data User dari Database: " . print_r($user, true));
 
-    //     // Verifikasi password
-    //     if (password_verify($password, $user['password'])) {
-    //         // Login berhasil
-    //         session_start();
-    //         $_SESSION['user_id'] = $user['id'];
-    //         $_SESSION['username'] = $user['username'];
+        if (password_verify($password, $user['password'])) {
+            session_start();
+            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['username'] = $user['username'];
 
-    //         // Redirect ke index.php setelah login berhasil
-    //         header("Location: ../../index.php");
-    //         exit();  // Penting untuk menghentikan eksekusi skrip setelah redirect
-    //     } else {
-    //         // Password salah
-    //         error_log("Verifikasi password gagal untuk email: " . $email);
-    //         http_response_code(401);
-    //         echo "Email atau password salah"; // PESAN ERROR TEXT BIASA
-    //     }
-    // }
+            echo json_encode(['status' => 'success', 'message' => 'Login berhasil']);
+        } else {
+            error_log("Verifikasi password gagal untuk email: " . $email);
+            http_response_code(401);
+            echo json_encode(['status' => 'error', 'message' => 'Email atau password salah']);
+        }
+    }
 
     public function logout()
     {
-        // (Kode logout Anda - tidak berubah)
+        session_start();
+        session_destroy();
+        header("Location: ../../login.html");
+        exit();
     }
 }
 
@@ -128,9 +125,9 @@ if (isset($_GET['action'])) {
         $auth->$action();
     } else {
         http_response_code(400);
-        echo "Action tidak valid"; // PESAN ERROR TEXT BIASA
+        echo json_encode(['status' => 'error', 'message' => 'Action tidak valid']);
     }
 } else {
     http_response_code(400);
-    echo "Action tidak didefinisikan"; // PESAN ERROR TEXT BIASA
+    echo json_encode(['status' => 'error', 'message' => 'Action tidak didefinisikan']);
 }

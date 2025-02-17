@@ -3,6 +3,7 @@
 class User
 {
     private $db;
+    private $conn;
 
     public function __construct()
     {
@@ -29,15 +30,12 @@ class User
         $sql = "INSERT INTO users (username, first_name, last_name, email, password, created_at) VALUES ('$username', '$first_name', '$last_name', '$email', '$hashedPassword', NOW())";
         return $this->db->query($sql);
     }
-    public function getUserByEmail($email) // PERUBAHAN NAMA METHOD
+    public function getUserByEmail($email)
     {
-        $email = $this->db->real_escape_string($email); // Escape input
-        $sql = "SELECT id, username, first_name, last_name, email, password FROM users WHERE email = '$email'";
-        $result = $this->db->query($sql);
-        if ($result) {
-            return $result->fetch_assoc();
-        } else {
-            return false;
-        }
+        $query = "SELECT * FROM users WHERE email = :email LIMIT 1";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(":email", $email);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 }
