@@ -3,39 +3,42 @@
 class User
 {
     private $db;
-    private $conn;
 
-    public function __construct()
+    public function __construct($db)
     {
-        global $db; // Akses koneksi mysqli dari database.php
-        $this->db = $db;
+        $this->db = $db; // Gunakan koneksi dari parameter
     }
 
     public function checkEmail($email)
     {
-        $email = $this->db->real_escape_string($email);  // Escape input
-        $sql = "SELECT COUNT(*) FROM users WHERE email = '$email'";
-        $result = $this->db->query($sql);
-        return (bool)$result->fetch_row()[0];
+        $sql = "SELECT id FROM users WHERE email = ? LIMIT 1"; // Ambil id saja (lebih efisien)
+        $stmt = $this->db->prepare($sql);
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        return $result->num_rows > 0; // Jika ada baris, berarti email sudah ada
     }
+    
 
     public function register($username, $first_name, $last_name, $email, $password)
     {
-        $username = $this->db->real_escape_string($username); // Escape input
-        $first_name = $this->db->real_escape_string($first_name); // Escape input
-        $last_name = $this->db->real_escape_string($last_name); // Escape input
-        $email = $this->db->real_escape_string($email);   // Escape input
-        $password = $this->db->real_escape_string($password); // Escape input
+        $sql = "INSERT INTO users (username, first_name, last_name, email, password, created_at) VALUES (?, ?, ?, ?, ?, NOW())";
+        $stmt = $this->db->prepare($sql);
+        
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-        $sql = "INSERT INTO users (username, first_name, last_name, email, password, created_at) VALUES ('$username', '$first_name', '$last_name', '$email', '$hashedPassword', NOW())";
-        return $this->db->query($sql);
+        $stmt->bind_param("sssss", $username, $first_name, $last_name, $email, $hashedPassword);
+        
+        return $stmt->execute();
     }
+
     public function getUserByEmail($email)
     {
-        $query = "SELECT * FROM users WHERE email = :email LIMIT 1";
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(":email", $email);
+        $sql = "SELECT id, username, first_name, last_name, email, password FROM users WHERE email = ? LIMIT 1";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bind_param("s", $email);
         $stmt->execute();
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        $result = $stmt->get_result();
+        return $result->fetch_assoc();
     }
 }

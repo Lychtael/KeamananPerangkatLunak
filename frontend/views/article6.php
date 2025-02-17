@@ -1,3 +1,12 @@
+<?php
+session_start();
+
+// Periksa apakah pengguna sudah login atau belum
+if (!isset($_SESSION['user_id'])) {
+    header("Location: frontend/views/login.php");
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="id">
 <head>

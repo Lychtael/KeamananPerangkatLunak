@@ -174,34 +174,28 @@
     </div>
 
     <script>
-      document
-        .getElementById("loginForm")
-        .addEventListener("submit", function (e) {
-          e.preventDefault();
+    document.getElementById("loginForm").addEventListener("submit", function (e) {
+        e.preventDefault();
 
-          const formData = new FormData(this);
+        const formData = new FormData(this);
 
-          // Tambahkan logging di sini!
-          console.log("Email:", formData.get("email"));
-          console.log("Password:", formData.get("password"));
-
-          fetch("backend/controllers/AuthController.php?action=login", {
+        fetch("backend/login.php", { // Pastikan path ini sesuai dengan backend login
             method: "POST",
-            body: formData,
-          })
-            .then((response) => {
-              if (response.ok) {
-                window.location.href = "frontend/index.php"; // Redirect jika login berhasil
-              } else {
-                alert("Login gagal. Periksa email dan password Anda."); // Tampilkan pesan error
-              }
-            })
-
-            .catch((error) => {
-              console.error("Error:", error);
-              alert("Terjadi kesalahan pada sistem");
-            });
+            body: formData
+        })
+        .then(response => response.json()) // Pastikan response diproses sebagai JSON
+        .then(data => {
+            if (data.status === "success") {
+                window.location.href = "frontend/views/index.php"; // Redirect jika login berhasil
+            } else {
+                alert(data.message); // Tampilkan pesan error dari backend
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            alert("Terjadi kesalahan pada sistem");
         });
+    });
     </script>
   </body>
 </html>

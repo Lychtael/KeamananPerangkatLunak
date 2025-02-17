@@ -1,3 +1,12 @@
+<?php
+session_start();
+
+// Periksa apakah pengguna sudah login atau belum
+if (!isset($_SESSION['user_id'])) {
+    header("Location: frontend/views/login.php");
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="id">
   <head>
@@ -52,7 +61,7 @@
               prioritize environmental impact, beauty brands are embracing a
               holistic approach to sustainability. Look out for products that
               not only enhance your beauty but also contribute to a healthier
-              planet.  Smart skincare devices are taking personalized skincare
+              planet. Smart skincare devices are taking personalized skincare
               to the next level. From AI-powered skin analysis tools to smart
               cleansing devices, these innovations provide tailored
               recommendations based on individual skin needs. Expect to see a
