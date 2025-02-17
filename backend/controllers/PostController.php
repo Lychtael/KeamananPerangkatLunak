@@ -1,49 +1,115 @@
 <?php
-require_once '../config/database.php';
-require_once '../models/Post.php';
+require_once 'models/Post.php';
 
-class PostController {
-    private $db;
+class PostController
+{
     private $postModel;
 
-    public function __construct() {
-        $this->db = Database::connect();
-        $this->postModel = new Post($this->db);
+    public function __construct()
+    {
+        $this->postModel = new Post();
     }
 
-    // 1. Ambil semua postingan
-    public function getAllPosts() {
-        return $this->postModel->getAll();
+    // Display all posts
+    public function index()
+    {
+        $posts = $this->postModel->getAllPosts();
+        require 'views/posts/index.php';
     }
 
-    // 2. Ambil detail postingan berdasarkan ID
-    public function getPostById($id) {
-        return $this->postModel->getById($id);
-    }
-
-    // 3. Tambah postingan (hanya user login)
-    public function createPost($title, $content, $userId, $categoryId) {
-        if (empty($title) || empty($content)) {
-            return "Judul dan konten harus diisi!";
+    // Show a single post
+    public function show($id)
+    {
+        $post = $this->postModel->getPostById($id);
+        if (!$post) {
+            die("Post not found.");
         }
-        return $this->postModel->create($title, $content, $userId, $categoryId);
+        require 'views/posts/show.php';
     }
 
-    // 4. Edit postingan (hanya pemilik postingan)
-    public function updatePost($id, $title, $content, $userId, $categoryId) {
-        $post = $this->postModel->getById($id);
-        if (!$post || $post['user_id'] != $userId) {
-            return "Tidak diizinkan mengedit postingan ini!";
-        }
-        return $this->postModel->update($id, $title, $content, $categoryId);
+    // Show form to create a post
+    public function create()
+    {
+        require 'views/posts/create.php';
     }
 
-    // 5. Hapus postingan (hanya pemilik postingan)
-    public function deletePost($id, $userId) {
-        $post = $this->postModel->getById($id);
-        if (!$post || $post['user_id'] != $userId) {
-            return "Tidak diizinkan menghapus postingan ini!";
+    // Store a new post
+    public function store()
+    {
+        if ($_SERVER["REQUEST_METHOD"] === "POST") {
+            $title = trim($_POST['title']);
+            $content = trim($_POST['content']);
+            $keywords = trim($_POST['keywords']);
+            $author_id = $_SESSION['user_id'];
+    
+            // Validate fields
+            if (empty($title) || empty($content)) {
+                die("Title and content cannot be empty.");
+            }
+    
+            // Handle image upload
+            $imagePath = null;
+            if (!empty($_FILES["image"]["name"])) {
+                $targetDir = "uploads/";
+                $imageName = time() . "_" . basename($_FILES["image"]["name"]);
+                $targetFile = $targetDir . $imageName;
+                $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
+    
+                // Validate file type
+                $allowedTypes = ['jpg', 'jpeg', 'png'];
+                if (!in_array($imageFileType, $allowedTypes)) {
+                    die("Invalid image format. Allowed: JPG, JPEG, PNG.");
+                }
+    
+                // Move uploaded file
+                if (move_uploaded_file($_FILES["image"]["tmp_name"], $targetFile)) {
+                    $imagePath = $imageName;
+                } else {
+                    die("Image upload failed.");
+                }
+            }
+    
+            // Insert post into database
+            $this->postModel->addPost($title, $content, $author_id, $imagePath, $keywords);
+    
+            header("Location: index.php?controller=post&action=index");
+            exit();
         }
-        return $this->postModel->delete($id);
+    }
+    
+
+    // Show form to edit a post
+    public function edit($id)
+    {
+        $post = $this->postModel->getPostById($id);
+        if (!$post) {
+            die("Post not found.");
+        }
+        require 'views/posts/edit.php';
+    }
+
+    // Update an existing post
+    public function update($id)
+    {
+        if ($_SERVER["REQUEST_METHOD"] === "POST") {
+            $title = trim($_POST['title']);
+            $content = trim($_POST['content']);
+
+            if (empty($title) || empty($content)) {
+                die("Title and content cannot be empty.");
+            }
+
+            $this->postModel->updatePost($id, $title, $content);
+            header("Location: index.php?controller=post&action=index");
+            exit();
+        }
+    }
+
+    // Delete a post
+    public function destroy($id)
+    {
+        $this->postModel->deletePost($id);
+        header("Location: index.php?controller=post&action=index");
+        exit();
     }
 }

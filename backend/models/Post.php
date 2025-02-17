@@ -1,70 +1,59 @@
 <?php
-class Post {
-    private $conn;
-    private $table = "posts";
+require_once 'config/Database.php';
 
-    public function __construct($db) {
-        $this->conn = $db;
+class Post
+{
+    private $db;
+
+    public function __construct()
+    {
+        $this->db = Database::connect();
     }
 
-    // 1. Ambil semua postingan (dengan kategori & user)
-    public function getAll() {
-        $query = "SELECT p.id, p.title, p.content, p.created_at, 
-                         u.username AS author, c.name AS category 
-                  FROM " . $this->table . " p
-                  JOIN users u ON p.user_id = u.id
-                  JOIN categories c ON p.category_id = c.id
-                  ORDER BY p.created_at DESC";
-        $stmt = $this->conn->prepare($query);
+    public function getAllPosts()
+    {
+        $query = "SELECT * FROM posts ORDER BY created_at DESC";
+        $result = $this->db->query($query);
+        return $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
+    }
+
+    public function getPostById($id)
+    {
+        $query = "SELECT * FROM posts WHERE id = ?";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param("i", $id);
         $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $stmt->get_result()->fetch_assoc();
     }
 
-    // 2. Ambil postingan berdasarkan ID
-    public function getById($id) {
-        $query = "SELECT p.id, p.title, p.content, p.created_at, 
-                         u.username AS author, c.name AS category 
-                  FROM " . $this->table . " p
-                  JOIN users u ON p.user_id = u.id
-                  JOIN categories c ON p.category_id = c.id
-                  WHERE p.id = :id";
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(":id", $id);
-        $stmt->execute();
-        return $stmt->fetch(PDO::FETCH_ASSOC);
-    }
-
-    // 3. Tambah postingan baru
-    public function create($title, $content, $userId, $categoryId) {
-        $query = "INSERT INTO " . $this->table . " (title, content, user_id, category_id) 
-                  VALUES (:title, :content, :user_id, :category_id)";
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(":title", $title);
-        $stmt->bindParam(":content", $content);
-        $stmt->bindParam(":user_id", $userId);
-        $stmt->bindParam(":category_id", $categoryId);
+    public function addPost($title, $content, $author_id, $image_path, $keywords)
+    {
+        $query = "INSERT INTO posts (title, content, author_id, image_path, keywords, created_at) 
+                  VALUES (?, ?, ?, ?, ?, NOW())";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param("ssiss", $title, $content, $author_id, $image_path, $keywords);
         return $stmt->execute();
     }
 
-    // 4. Edit postingan (hanya pemilik)
-    public function update($id, $title, $content, $categoryId) {
-        $query = "UPDATE " . $this->table . " 
-                  SET title = :title, content = :content, category_id = :category_id
-                  WHERE id = :id";
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(":id", $id);
-        $stmt->bindParam(":title", $title);
-        $stmt->bindParam(":content", $content);
-        $stmt->bindParam(":category_id", $categoryId);
+    public function updatePost($id, $title, $content, $image_path = null)
+    {
+        if ($image_path) {
+            $query = "UPDATE posts SET title = ?, content = ?, image_path = ? WHERE id = ?";
+            $stmt = $this->db->prepare($query);
+            $stmt->bind_param("sssi", $title, $content, $image_path, $id);
+        } else {
+            $query = "UPDATE posts SET title = ?, content = ? WHERE id = ?";
+            $stmt = $this->db->prepare($query);
+            $stmt->bind_param("ssi", $title, $content, $id);
+        }
         return $stmt->execute();
     }
 
-    // 5. Hapus postingan (hanya pemilik)
-    public function delete($id) {
-        $query = "DELETE FROM " . $this->table . " WHERE id = :id";
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(":id", $id);
+    public function deletePost($id)
+    {
+        $query = "DELETE FROM posts WHERE id = ?";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param("i", $id);
         return $stmt->execute();
     }
 }
-?>
